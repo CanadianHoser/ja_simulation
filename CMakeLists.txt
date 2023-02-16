@@ -13,6 +13,15 @@ add_compile_options(-std=c++11 -Wall -Werror)
 set(APP_NAME joby_sim)
 set(APP_LIB_NAME joby_sim_lib)
 
-add_subdirectory(cpputest)
-add_executable(${APP_NAME} simulation_main.cpp)
+option(COMPILE_UT_HARNESS "Compile CppUTest" OFF)
+if (COMPILE_UT_HARNESS)
+  add_subdirectory(cpputest)
+  set(CPPUTEST_HOME cpputest)
+endif(COMPILE_UT_HARNESS)
 
+option(COMPILE_TESTS "Compile the tests" ON)
+if (COMPILE_TESTS)
+  add_subdirectory(UnitTest)
+endif(COMPILE_TESTS)
+
+add_subdirectory(src)
