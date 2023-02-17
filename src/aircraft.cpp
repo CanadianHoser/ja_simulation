@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <iostream>
 #include <string>
 #include <vector>
 #include "aircraft.hpp"
@@ -16,3 +17,23 @@ aircraft::aircraft(model aircraft_model) : aircraft_model(aircraft_model)
     model_specs = &model_data.at(static_cast<int>(aircraft_model));
     current_battery_cap = model_specs->battery_cap_kWh;
 };
+
+ret_code aircraft::fly(uint32_t distance)
+{
+    if (distance <= get_available_range()) {
+        std::cout << "Flying " << distance << " miles" << std::endl;
+        current_battery_cap -= distance * model_specs->energy_use_at_cruise;
+        return ret_code::OK;
+    } else {
+        std::cout << "Requested distance exceeds planes available range" << std::endl;
+        return ret_code::EXCEEDS_CAPACITY;
+    }
+}
+
+float aircraft::recharge() 
+{
+    float time_to_charge = (model_specs->battery_cap_kWh - current_battery_cap) *
+                            model_specs->time_to_charge_hours/model_specs->battery_cap_kWh;
+    current_battery_cap = model_specs->battery_cap_kWh;
+    return time_to_charge;
+}

@@ -5,6 +5,7 @@
 
 enum class model {Alpha, Bravo, Charlie, Delta, Echo};
 enum class aircraft_status {idle, in_flight, charging, needs_charge};
+enum class ret_code {OK, EXCEEDS_CAPACITY, NEEDS_CHARGE};
 
 struct fixed_model_data_t {
         const uint32_t cruise_speed_mph;
@@ -26,6 +27,9 @@ class aircraft {
         aircraft(model aircraft_model);
         aircraft_status get_craft_status() {return status;};
         uint32_t get_cruise_speed() {return model_data.at(static_cast<int>(aircraft_model)).cruise_speed_mph;};
-        uint32_t get_battery_level() {return current_battery_cap;};
+        float get_battery_level() {return 100*current_battery_cap/model_specs->battery_cap_kWh;};
+        uint32_t get_available_range() {return current_battery_cap/model_specs->energy_use_at_cruise;}
+        ret_code fly(uint32_t distance);
+        float recharge();
 };
 #endif
