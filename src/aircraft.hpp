@@ -19,6 +19,7 @@ extern std::vector<const fixed_model_data_t> model_data;
 class aircraft {
     private:
         model    aircraft_model;
+        const fixed_model_data_t* model_specs;
         uint32_t current_battery_cap;
         aircraft_status status = aircraft_status::idle;
     public:

@@ -13,5 +13,6 @@ std::vector<const fixed_model_data_t> model_data =
    
 aircraft::aircraft(model aircraft_model) : aircraft_model(aircraft_model)
 {
-    current_battery_cap = model_data.at(static_cast<int>(aircraft_model)).battery_cap_kWh;
+    model_specs = &model_data.at(static_cast<int>(aircraft_model));
+    current_battery_cap = model_specs->battery_cap_kWh;
 };
