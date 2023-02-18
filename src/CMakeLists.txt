@@ -3,6 +3,7 @@
 # (1) Build a library with my application sources
 set(APP_LIB_SOURCE
     aircraft.cpp
+    fleet.cpp
 )
 
 add_library(${APP_LIB_NAME} ${APP_LIB_SOURCE})

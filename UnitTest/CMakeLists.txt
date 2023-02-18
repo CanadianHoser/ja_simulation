@@ -16,6 +16,7 @@ endif()
 set(TEST_APP_NAME ${APP_NAME}_tests)
 set(TEST_SOURCES
     aircraft_ut.cpp
+    fleet_ut.cpp
     ut_main.cpp
 )
 

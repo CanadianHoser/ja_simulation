@@ -1,10 +1,3 @@
-//
-//  linked_lists_tests.cpp
-//  HelloWorld
-//
-//  Created by Warren Hein on 3/10/21.
-//
-
 #include <stdio.h>
 #include "CppUTest/TestHarness.h"
 #include "aircraft.hpp"
