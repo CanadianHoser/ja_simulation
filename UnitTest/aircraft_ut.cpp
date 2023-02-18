@@ -50,11 +50,12 @@ TEST_GROUP(fly_plane)
     std::unique_ptr<aircraft> my_plane = std::unique_ptr<aircraft>(new aircraft(model::Alpha));
     void setup() override
     {
+        my_plane->disable_faults();
     }
 
     void teardown() override
     {
-        my_plane->recharge();
+        my_plane->reset();
     }
 };
 
@@ -73,4 +74,40 @@ TEST(fly_plane, flightRequestBeyondRangeCausesError)
 TEST(fly_plane, canCalculateCurrentRangeForAircraft)
 {
     LONGS_EQUAL(200, my_plane->get_available_range());
+}
+
+TEST(fly_plane, planeNeedsChargeWhenBatteryDepleted)
+{
+    ret_code rc = my_plane->fly(200);
+    LONGS_EQUAL(aircraft_status::needs_charge, my_plane->get_craft_status());
+    LONGS_EQUAL(ret_code::NEEDS_CHARGE, rc);
+}
+
+TEST(fly_plane, odometerIncrementsDuringFlight)
+{
+    my_plane->fly(200);
+    LONGS_EQUAL(200, my_plane->get_odometer());
+}
+
+TEST_GROUP(airplane_fault)
+{
+    std::unique_ptr<aircraft> my_plane = std::unique_ptr<aircraft>(new aircraft(model::Alpha));
+    void setup() override
+    {
+    }
+
+    void teardown() override
+    {
+        my_plane->reset();
+    }
+};
+
+TEST(airplane_fault, faultsCanOccur)
+{
+    for (int iteration = 0; iteration < 1000; iteration++) {
+        my_plane->fly(120);
+        my_plane->recharge();
+    }
+    // LONGS_EQUAL(2000, my_plane->get_num_of_faults());
+    DOUBLES_EQUAL(0.25, my_plane->get_num_of_faults()/1000.0, 0.05);
 }
