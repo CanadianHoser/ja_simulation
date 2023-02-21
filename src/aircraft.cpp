@@ -4,7 +4,9 @@
 #include <vector>
 #include "aircraft.hpp"
 
-std::vector<const fixed_model_data_t> model_data = 
+using namespace std;
+
+vector<const fixed_model_data_t> model_data = 
    {{ 120, 320, 0.60, 1.6, 4, 0.25 }, // Alpha
     { 100, 100, 0.20, 1.5, 5, 0.10 }, // Bravo
     { 160, 220, 0.80, 2.2, 3, 0.05 }, // Charlie
@@ -14,6 +16,8 @@ std::vector<const fixed_model_data_t> model_data =
    
 // Range concerns are even higher when you're off the ground.
 const float safety_margin = 10.0;   
+
+// TODO: use a true logging mechanism like easylogging to provide more granular control
 bool debug = false;
 
 aircraft::aircraft(model aircraft_model) : aircraft_model(aircraft_model)
@@ -37,7 +41,7 @@ ret_code aircraft::fly(uint32_t distance)
     ret_code rc;
     if (distance <= get_available_range()) {
         if (debug)
-            std::cout << "Flying " << distance << " miles" << std::endl;
+            cout << "Flying " << distance << " miles" << endl;
         current_battery_cap -= distance * model_specs->energy_use_at_cruise;
         odometer += distance;
         if (get_battery_level() <= safety_margin) {
@@ -52,14 +56,14 @@ ret_code aircraft::fly(uint32_t distance)
             bool fault_occurs = (rand()%100) < 100*model_specs->fault_probability*distance/model_specs->cruise_speed_mph;
             if (fault_occurs) {
                 if (debug)
-                    std::cout << "FAULT occurred! " << std::endl;
+                    cout << "FAULT occurred! " << endl;
                 num_faults++;
                 rc = ret_code::FAULT_OCCURRED;
             }
         }
     } else {
         if (debug)
-            std::cout << "Requested distance exceeds planes available range" << std::endl;
+            cout << "Requested distance exceeds planes available range" << endl;
         rc =  ret_code::EXCEEDS_CAPACITY;
     }
     return rc;

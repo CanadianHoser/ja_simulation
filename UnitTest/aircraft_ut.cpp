@@ -2,6 +2,8 @@
 #include "CppUTest/TestHarness.h"
 #include "aircraft.hpp"
 
+using namespace std;
+
 TEST_GROUP(aircraft)
 {
     void setup() override
@@ -40,7 +42,7 @@ TEST(aircraft, rechargeRestoresBatteryToMaxCapacity)
 }
 TEST_GROUP(fly_plane)
 {
-    std::unique_ptr<aircraft> my_plane = std::unique_ptr<aircraft>(new aircraft(model::Alpha));
+    unique_ptr<aircraft> my_plane = unique_ptr<aircraft>(new aircraft(model::Alpha));
     void setup() override
     {
         my_plane->disable_faults();
@@ -84,7 +86,7 @@ TEST(fly_plane, odometerIncrementsDuringFlight)
 
 TEST_GROUP(airplane_fault)
 {
-    std::unique_ptr<aircraft> my_plane = std::unique_ptr<aircraft>(new aircraft(model::Alpha));
+    unique_ptr<aircraft> my_plane = unique_ptr<aircraft>(new aircraft(model::Alpha));
     void setup() override
     {
     }
@@ -97,6 +99,7 @@ TEST_GROUP(airplane_fault)
 
 TEST(airplane_fault, faultsCanOccur)
 {
+    // Generate a large enough number of flights to approximate the the statistical faults
     for (int iteration = 0; iteration < 1000; iteration++) {
         my_plane->fly(120);
         my_plane->recharge();
