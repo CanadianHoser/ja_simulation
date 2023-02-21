@@ -57,7 +57,7 @@ TEST_GROUP(fly_plane)
 TEST(fly_plane, flightCausesBatteryToDeplete)
 {
     my_plane->fly(100);
-    CHECK_FALSE(model_data.at(static_cast<int>(model::Alpha)).battery_cap_kWh == my_plane->get_battery_level());
+    DOUBLES_EQUAL(50.0, my_plane->get_battery_level(), 0);
 }
 
 TEST(fly_plane, flightRequestBeyondRangeCausesError)

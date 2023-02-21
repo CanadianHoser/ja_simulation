@@ -1,4 +1,36 @@
-Build instructions
- cd build
- cmake ..
- make
+Build instructions (with cpputest already installed):
+    cd build
+    cmake ..
+    make
+
+If cpputest is not installed:
+    git submodule init
+    git submodule update
+    cmake -DCOMPILE_UT_HARNESS=on ..
+    make
+
+The builds have been tested on MacOS 13.1.  As of 2/20, builds on Ubuntu were failing due to
+unexplained differences in the standard template libraries (have not yet been able to debug).
+
+
+Unit tests are built and run as part of the normal build process.  To run with verbosity, the 
+compiled UT's may be executed standalone after the build process:
+    <WS_ROOT>/build/UnitTest/joby_sim_tests -c -v
+
+i.e.
+whein@Looney build % ./UnitTest/joby_sim_tests -c -v
+TEST(fleet, dispatchAircraftIfAvailable)Dispatching aircraft for 100 miles
+ - 0 ms
+TEST(fleet, addPlaneIsAvailableForUse) - 0 ms
+TEST(airplane_fault, faultsCanOccur) - 0 ms
+TEST(fly_plane, odometerIncrementsDuringFlight) - 0 ms
+TEST(fly_plane, planeNeedsChargeWhenBatteryDepleted) - 0 ms
+TEST(fly_plane, canCalculateCurrentRangeForAircraft) - 0 ms
+TEST(fly_plane, flightRequestBeyondRangeCausesError) - 0 ms
+TEST(fly_plane, flightCausesBatteryToDeplete) - 0 ms
+TEST(aircraft, rechargeRestoresBatteryToMaxCapacity) - 0 ms
+TEST(aircraft, batteryIsFullyChargedOnInit) - 0 ms
+TEST(aircraft, planeIsIdleOnInit) - 0 ms
+TEST(aircraft, constructorAssignsModel) - 0 ms
+
+OK (12 tests, 12 ran, 13 checks, 0 ignored, 0 filtered out, 1 ms)

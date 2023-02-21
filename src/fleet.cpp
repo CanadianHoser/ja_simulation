@@ -28,7 +28,9 @@ void fleet::dispatch_aircraft()
     
     for (req_iter = request_queue.begin(); req_iter != request_queue.end(); ++req_iter)
     {
-        cout << "Dispatching aircraft for " << (*req_iter)->distance_req() << " miles" << endl;
-        request_queue.erase(req_iter);
+        if ((*req_iter)->state == request_state::PENDING) {
+            cout << "Dispatching aircraft for " << (*req_iter)->distance_req() << " miles" << endl;
+            request_queue.erase(req_iter);
+        }
     }
 }
