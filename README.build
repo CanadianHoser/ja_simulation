@@ -1,4 +1,4 @@
-Build instructions (with cpputest already installed):
+Build instructions (with cpputest already installed through a package manager):
     cd build
     cmake ..
     make
