@@ -32,6 +32,7 @@ class aircraft {
         uint32_t get_cruise_speed() {return model_data.at(static_cast<int>(aircraft_model)).cruise_speed_mph;};
         float get_battery_level() {return 100*current_battery_cap/model_specs->battery_cap_kWh;};
         uint32_t get_available_range() {return current_battery_cap/model_specs->energy_use_at_cruise;}
+        uint32_t get_maximum_passengers() {return model_specs->max_passengers;}
         uint64_t get_odometer() {return odometer;}
         uint64_t get_num_of_faults() {return num_faults;}
         ret_code fly(uint32_t distance);
