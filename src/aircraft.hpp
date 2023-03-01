@@ -4,7 +4,7 @@
 #include <vector>
 
 enum class model {Alpha, Bravo, Charlie, Delta, Echo};
-enum class aircraft_status {idle, in_flight, charging, needs_charge};
+enum class aircraft_status {idle, in_flight, charging, needs_charge, system_fault};
 enum class ret_code {OK, EXCEEDS_CAPACITY, NEEDS_CHARGE, FAULT_OCCURRED};
 
 struct fixed_model_data_t {
@@ -28,7 +28,7 @@ class aircraft {
         uint32_t num_faults;
     public:
         aircraft(model aircraft_model);
-        aircraft_status get_craft_status() {return status;};
+        aircraft_status get_craft_status();
         uint32_t get_cruise_speed() {return model_data.at(static_cast<int>(aircraft_model)).cruise_speed_mph;};
         float get_battery_level() {return 100*current_battery_cap/model_specs->battery_cap_kWh;};
         uint32_t get_available_range() {return current_battery_cap/model_specs->energy_use_at_cruise;}
@@ -37,6 +37,7 @@ class aircraft {
         uint64_t get_num_of_faults() {return num_faults;}
         ret_code fly(uint32_t distance);
         float recharge();
+        // void complete_charge();  
 
         // UT Support
         void reset();

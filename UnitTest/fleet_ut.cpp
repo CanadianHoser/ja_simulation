@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <iostream>
 #include "CppUTest/TestHarness.h"
 #include "fleet.hpp"
 
@@ -65,3 +66,49 @@ TEST(fleet, matchedAircraftIsRemovedFromAvailableQueue)
     dispatched_plane = my_fleet->match_aircraft_to_request(request);
     LONGS_EQUAL(0, my_fleet->get_num_of_available_aircraft());
 }
+
+TEST(fleet, uponReturnAircraftWithSuitableRangeIsReturnedToAvailability) 
+{
+    add_airplane(model::Alpha);
+    shared_ptr<aircraft> dispatched_plane = nullptr;
+    shared_ptr<flight_req> request = unique_ptr<flight_req>(new flight_req(2,100));
+    dispatched_plane = my_fleet->match_aircraft_to_request(request);
+    LONGS_EQUAL(0, my_fleet->get_num_of_available_aircraft());
+    my_fleet->return_aircraft_from_dispatch(dispatched_plane);
+    LONGS_EQUAL(1, my_fleet->get_num_of_available_aircraft());
+}
+
+TEST(fleet, uponReturnAircraftWithInsufficientRangeIsAddedToChargeQueue) 
+{
+    add_airplane(model::Alpha);
+    shared_ptr<aircraft> dispatched_plane = nullptr;
+    shared_ptr<flight_req> request = unique_ptr<flight_req>(new flight_req(2,200));
+    dispatched_plane = my_fleet->match_aircraft_to_request(request);
+    dispatched_plane->disable_faults();
+    (void) dispatched_plane->fly(request->distance_req());
+    my_fleet->return_aircraft_from_dispatch(dispatched_plane);
+    LONGS_EQUAL(0, my_fleet->get_num_of_available_aircraft());
+    LONGS_EQUAL(1, my_fleet->get_num_of_aircraft_in_charge_queue());
+}
+
+TEST(fleet, uponReturnAircraftExperiencingFaultIsAddedToRepairQueue) 
+{
+    add_airplane(model::Echo);
+    shared_ptr<aircraft> dispatched_plane = nullptr;
+    do {
+        shared_ptr<flight_req> request = unique_ptr<flight_req>(new flight_req(2,25));
+        dispatched_plane = my_fleet->match_aircraft_to_request(request);
+        (void) dispatched_plane->fly(request->distance_req());
+        if (aircraft_status::needs_charge == dispatched_plane->get_craft_status())
+        {
+            std::cout << "Recharging plane" << std::endl;
+            dispatched_plane->recharge();
+            // dispatched_plane->complete_charge();
+        }
+        my_fleet->return_aircraft_from_dispatch(dispatched_plane);
+    } while (dispatched_plane->get_craft_status() != aircraft_status::system_fault);
+    LONGS_EQUAL(0, my_fleet->get_num_of_available_aircraft());
+    LONGS_EQUAL(1, my_fleet->get_num_of_aircraft_undergoing_repair());
+}
+
+IGNORE_TEST(fleet, chargingAircraftDoesNotClearFault) {};

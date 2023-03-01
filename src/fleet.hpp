@@ -34,9 +34,12 @@ class fleet {
         fleet();
         uint32_t get_num_of_aircraft() { return num_of_aircraft;};
         uint32_t get_num_of_available_aircraft() { return available_airplanes.size();};
+        uint32_t get_num_of_aircraft_undergoing_repair() { return repair_queue.size();};
+        uint32_t get_num_of_aircraft_in_charge_queue() { return charge_queue.size();};
         void add_aircraft(std::shared_ptr<aircraft> new_plane);
         void add_flight_request_to_queue(std::unique_ptr<flight_req> request);
         void dispatch_aircraft();
+        void return_aircraft_from_dispatch(std::shared_ptr<aircraft> dispatched_aircraft);
         uint32_t get_request_queue_size() {return request_queue.size();};
         std::shared_ptr<aircraft> match_aircraft_to_request(std::shared_ptr<flight_req> request);
         void clear_request_queue();

@@ -58,6 +58,21 @@ void fleet::dispatch_aircraft()
     }
 }
 
+void fleet::return_aircraft_from_dispatch(std::shared_ptr<aircraft> dispatched_aircraft)
+{
+    // Check status of aircraft
+    if (dispatched_aircraft->get_craft_status() == aircraft_status::idle) {
+        cout << "Putting plane back into availability queue" << endl;
+        available_airplanes.emplace_back(dispatched_aircraft);
+    } else if (dispatched_aircraft->get_craft_status() == aircraft_status::needs_charge) {
+        cout << "Putting plane into charge queue" << endl;
+        charge_queue.emplace_back(dispatched_aircraft);
+    } else if (dispatched_aircraft->get_craft_status() == aircraft_status::system_fault) {
+        cout << "Putting plane into repair queue" << endl;
+        repair_queue.emplace_back(dispatched_aircraft);
+    }
+}
+
 void fleet::clear_request_queue() {
     request_queue.clear();
 }

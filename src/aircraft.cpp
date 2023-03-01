@@ -59,6 +59,7 @@ ret_code aircraft::fly(uint32_t distance)
                 if (debug)
                     cout << "FAULT occurred! " << endl;
                 num_faults++;
+                status = aircraft_status::system_fault;
                 rc = ret_code::FAULT_OCCURRED;
             }
         }
@@ -75,5 +76,21 @@ float aircraft::recharge()
     float time_to_charge = (model_specs->battery_cap_kWh - current_battery_cap) *
                             model_specs->time_to_charge_hours/model_specs->battery_cap_kWh;
     current_battery_cap = model_specs->battery_cap_kWh;
+    // status = aircraft_status::charging;
+    if (status != aircraft_status::system_fault)
+        status = aircraft_status::idle;
     return time_to_charge;
+}
+
+// void aircraft::complete_charge() 
+// {
+//     status = aircraft_status::idle;
+// }
+
+aircraft_status aircraft::get_craft_status()
+{
+    // if (status == aircraft_status::system_fault)
+    // if (get_battery_level() < safety_margin) 
+        // status = aircraft_status::needs_charge;
+    return status;
 }
