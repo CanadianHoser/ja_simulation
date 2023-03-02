@@ -8,7 +8,7 @@ project(JobySimulation
   LANGUAGES CXX
 )
 
-add_compile_options(-std=c++11 -Wall -Werror)
+add_compile_options(-std=c++11 -Wall -Werror -ggdb)
 
 set(APP_NAME joby_sim)
 set(APP_LIB_NAME joby_sim_lib)

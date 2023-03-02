@@ -6,7 +6,7 @@
 
 using namespace std;
 
-vector<const fixed_model_data_t> model_data = 
+vector<fixed_model_data_t> model_data = 
    /* mph  cap t2chg  nrg pc fault */
    {{ 120, 320, 0.60, 1.6, 4, 0.25 }, // Alpha
     { 100, 100, 0.20, 1.5, 5, 0.10 }, // Bravo
