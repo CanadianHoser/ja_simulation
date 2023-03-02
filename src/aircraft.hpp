@@ -25,7 +25,7 @@ class aircraft {
         uint64_t odometer = 0;
         aircraft_status status = aircraft_status::idle;
         bool simulate_faults = true;
-        uint32_t num_faults;
+        uint32_t num_faults = 0;
     public:
         aircraft(model aircraft_model);
         aircraft_status get_craft_status() {return status;};

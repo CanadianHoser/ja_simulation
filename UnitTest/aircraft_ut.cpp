@@ -104,6 +104,5 @@ TEST(airplane_fault, faultsCanOccur)
         my_plane->fly(120);
         my_plane->recharge();
     }
-    // LONGS_EQUAL(2000, my_plane->get_num_of_faults());
     DOUBLES_EQUAL(0.25, my_plane->get_num_of_faults()/1000.0, 0.05);
 }
