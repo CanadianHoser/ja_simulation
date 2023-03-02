@@ -15,12 +15,12 @@ struct fixed_model_data_t {
         const uint32_t max_passengers;
         const float    fault_probability;
 };
-extern std::vector<const fixed_model_data_t> model_data; 
+extern std::vector<fixed_model_data_t> model_data; 
 
 class aircraft {
     private:
         model    aircraft_model;
-        const fixed_model_data_t* model_specs;
+        fixed_model_data_t* model_specs;
         uint32_t current_battery_cap;
         uint64_t odometer = 0;
         aircraft_status status = aircraft_status::idle;

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <memory>
 #include "fleet.hpp"
 
 using namespace std; 
@@ -46,14 +47,23 @@ void fleet::dispatch_aircraft()
     deque<shared_ptr<flight_req>>::iterator req_iter;
     deque<shared_ptr<aircraft>>::iterator airplane_iter;
     
-    for (req_iter = request_queue.begin(); req_iter != request_queue.end(); ++req_iter)
+    if (request_queue.size() == 0) {
+	    cout << "No requests to dispatch" << endl;
+	    return;
+    }
+
+    for (req_iter = request_queue.begin(); req_iter != request_queue.end(); )
     {
         if ((*req_iter)->state == request_state::PENDING) {
             dispatched_aircraft = match_aircraft_to_request(*req_iter);
             if (dispatched_aircraft) {
                 cout << "Dispatching aircraft for " << (*req_iter)->distance_req() << " miles" << endl;
                 request_queue.erase(req_iter);
-            }
+            } else {
+		req_iter++;
+	    }
+        } else {
+  	    req_iter++;
         }
     }
 }
